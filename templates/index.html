@@ -16,6 +16,7 @@
 </head>
 
 <body>
+    <h1>Hello, {{user_id}}!</h1>
     <div class="container">
         <div id="app">
             <v-app id="inspire">
@@ -49,7 +50,9 @@
                 </v-navigation-drawer>
 
                 <v-content>
-                    <iframe id="pdfViewer" src="pdfjs-viewer/web/viewer.html" style="width: 100%; height: 100%;"
+                    <h1>Hello, {{userid}}!</h1>
+                    <a href='{{ url_for('logout')}}'>登出</a>
+                    <iframe id="pdfViewer" src="127.0.0.1:5000/static/pdfjs-viewer/web/viewer.html" style="width: 100%; height: 100%;"
                         allowfullscreen="" webkitallowfullscreen="">
                     </iframe>
                 </v-content>
@@ -122,8 +125,6 @@
                         
                         pdfData = self.base64ToUint8Array(response.data);
                         pdfjsframe.contentWindow.PDFViewerApplication.open(pdfData)
-                        pdfjsframe.contentWindow.PDFViewerApplication.open(pdfData)
-                        
                         
                     });
                 },
