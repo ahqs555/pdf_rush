@@ -1,12 +1,16 @@
 import json
 import os
 import base64
+import sqlite3
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 
 app = Flask(__name__, static_url_path='', static_folder='', template_folder='')
 CORS(app)
 
+
+# myDatabase = sqlite3.connect('database.bd')
+# cu = myDatabase.cursor()
 
 @app.route('/', methods=['GET'])
 def get_index():
@@ -32,7 +36,11 @@ def get_pdf_content():
     pdf_id = os.path.join(os.getcwd(), dir, file)
     with open(pdf_id, 'rb') as f:
         blob = base64.b64encode(f.read())
-    # TODO: use path to sent pdf blob to front end\
+    # Writing the data in to database
+
+    # cu.execute('INSERT INTO accesslog [(userid, contentname)] VALUES (?,?);', (userid, contentname))
+    # myDatabase.commit()
+
     return blob
 
 
