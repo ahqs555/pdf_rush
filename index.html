@@ -32,11 +32,8 @@
                     <v-card max-width="500" class="mx-auto">
 
                         <v-list nav dense :search="search">
-                            <v-list-item-group v-model="item" color="primary">
-                            <v-list-item v-for="file in files" :key="file.file_name" @click="loadPdfData(file.file_name)">
-                            <v-list-item-avatar v-if="avatar">
-                                <v-img :src="item.avatar"></v-img>
-                            </v-list-item-avatar>
+                            <v-list-item-group  color="primary">
+                            <v-list-item v-for="file in files" :key="file.file_name" @click="loadPdfData(file.file_name, uid)">
 
                                 <v-list-item-content>
                                     <v-list-item-title v-text="file.file_name">
@@ -66,6 +63,7 @@
             vuetify: new Vuetify(),
             data: {
                 pdf_content: Blob,
+                uid: '',
                 dense: true,
                 selectable: false,
                 activatable: true,
@@ -112,19 +110,20 @@
                     axios.get('http://127.0.0.1:5000/api/get_pdf_list').then(function (response) {
                         console.log(response.data);
                         self.files = response.data.pdf_file;
+                        self.uid = response.data.user_id;
                     });
                 },
 
 
-                loadPdfData: function (name) {
+                loadPdfData: function (name, uid) {
                     let pdfjsframe = document.getElementById('pdfViewer');
                     let self = this;
-                    axios.get('http://127.0.0.1:5000/api/get_pdf_content', {params:{file_name: name}}).then(function (response) {
+                    axios.get('http://127.0.0.1:5000/api/get_pdf_content', {params:{file_name: name, user_id: uid}}).then(function (response) {
                         
                         pdfData = self.base64ToUint8Array(response.data);
                         pdfjsframe.contentWindow.PDFViewerApplication.open(pdfData)
-                        temp = URL.createObjectURL(pdfjsframe.contentWindow.PDFViewerApplication.open(pdfData))
-                        window.open(temp)
+                        pdfjsframe.contentWindow.PDFViewerApplication.open(pdfData)
+                        
                         
                     });
                 },

@@ -38,17 +38,29 @@
 
 import sqlite3
 
-myDatabase = sqlite3.connect('database.db')
+myDatabase = sqlite3.connect('LogDB.db')
 cu = myDatabase.cursor()
-cu.execute("CREATE TABLE accesslog (id INTEGER PRIMARY KEY, time DEFAULT CURRENT_TIMESTAMP, userid INTEGER, contentname VARCHAR(100))")
+# cu.execute("SELECT name FROM sqlite_master WHERE type='table'")
+# Tables = cu.fetchall()  # Tables 为元组列表
+#
+# Tables = [line[0] for line in Tables]
+# print('accesslog' not in Tables)
+# myDatabase.close()
+# cu.execute("CREATE TABLE accesslog (id INTEGER PRIMARY KEY, time DEFAULT CURRENT_TIMESTAMP, userid INTEGER, contentname VARCHAR(100))")
 
 # cu.execute('INSERT INTO accesslog (userid, contentname) VALUES (?, ?)', (userid, contentname))
 
-myDatabase.commit()
-cursor = cu.execute("SELECT id, userid, contentname, time  from accesslog")
-for row in cursor:
-    print('id = ', row[0])
-    print('useid = ', row[1])
-    print('contentname = ', row[2])
-    print('time = ', row[3])
+# myDatabase.commit()
+
+#
+def selectFonction():
+    cursor = cu.execute("SELECT id, userid, contentname, time  from accesslog")
+    for row in cursor:
+        print('id = ', row[0])
+        print('useid = ', row[1])
+        print('contentname = ', row[2])
+        print('time = ', row[3])
+
+selectFonction()
+
 myDatabase.close()
