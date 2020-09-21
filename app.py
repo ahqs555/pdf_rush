@@ -21,11 +21,6 @@ if 'accesslog' not in Tables:
 cu.close()
 myDatabase.close()
 
-@app.route('/', methods=['GET'])
-def get_index():
-    return '我已收到'
-
-
 @app.route('/api/get_pdf_list', methods=['GET'])
 def get_pdf_list():
     global user_id

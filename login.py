@@ -86,8 +86,8 @@ class User(UserMixin):
 
 class LoginForm(FlaskForm):
     """登录表单类"""
-    username = StringField('用户名', validators=[DataRequired()])
-    password = PasswordField('密码', validators=[DataRequired()])
+    username = StringField('username', validators=[DataRequired()])
+    password = PasswordField('password', validators=[DataRequired()])
 
 
 # 后端处理登录
@@ -100,14 +100,14 @@ def login():
         password = form.password.data
         user_info = get_user(user_name)  # 从用户数据中查找用户记录
         if user_info is None:
-            emsg = "用户名或密码密码有误"
+            emsg = "Incorrect username or password"
         else:
             user = User(user_info)  # 创建用户实体
             if user.verify_password(password):  # 校验密码
                 login_user(user, remember=True)  # 创建用户 Session
                 return redirect(request.args.get('next') or url_for('index'))
             else:
-                emsg = "用户名或密码密码有误"
+                emsg = "Incorrect username or password"
     return render_template('login.html', form=form, emsg=emsg)
 
 
@@ -128,5 +128,4 @@ if __name__ == '__main__':
     abspath = os.path.abspath(__file__)
     dname = os.path.dirname(abspath)
     os.chdir(dname)
-    print(dname)
     app.run(host='0.0.0.0', port='7777', debug=True)

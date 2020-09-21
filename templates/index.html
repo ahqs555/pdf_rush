@@ -22,7 +22,8 @@
                 <v-navigation-drawer v-model="drawer" app clipped color="grey lighten-4" :width="325">
                     <v-text-field v-model="search" label="Search Contents" light flat solo-inverted
                         hide-details clearable clear-icon="mdi-close-circle-outline"></v-text-field>
-                    <v-checkbox v-model="caseSensitive" light hide-details label="Case sensitive search"></v-checkbox>
+                    <a href='{{ url_for('logout')}}'>Log out</a>
+                    <!-- <v-checkbox v-model="caseSensitive" light hide-details label="Case sensitive search"></v-checkbox> -->
                     <!--<v-treeview @update:active="load_data" :items="items" :dense="dense" :search="search"
                         :filter="filter" :selectable="selectable" :activatable="activatable" :hoverable="hoverable"
                         :open-on-click="openOnClick" :selected-color="selectedColor" :color="color" :shaped="shaped"
@@ -50,7 +51,7 @@
 
                 <v-content>
                     <h1 id="user_name" data-uid="{{ user_id }}">Hello, {{user_name}}!</h1>
-                    <a href='{{ url_for('logout')}}'>登出</a>
+                    <!-- <a href='{{ url_for('logout')}}'>Log out</a> -->
                     <iframe id="pdfViewer" src='{{ url_for('static', filename='pdfjs-viewer/web/viewer.html' ) }}' style="width: 100%; height: 100%;"
                         allowfullscreen="" webkitallowfullscreen="">
                     </iframe>
