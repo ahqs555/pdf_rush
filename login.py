@@ -1,5 +1,4 @@
 import os
-from flask import Flask
 from flask_login import LoginManager
 
 import uuid
@@ -8,19 +7,21 @@ from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
 from wtforms import StringField, PasswordField
-from wtforms.validators import DataRequired, EqualTo
+from wtforms.validators import DataRequired
 from flask_wtf import FlaskForm
-
-from flask import render_template, redirect, url_for, request
 from flask_login import login_user
 
-from flask import render_template, url_for
 from flask_login import current_user, login_required
 
 from flask import redirect, url_for
 from flask_login import logout_user
 
 from userlist import USERS
+
+import base64
+import sqlite3
+from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 
 
 app = Flask(__name__)  # 创建 Flask 应用
@@ -114,7 +115,7 @@ def login():
 @app.route('/')  # 首页
 @login_required  # 需要登录才能访问
 def index():
-    return render_template('index.html', userid=current_user.username)
+    return render_template('index.html', user_name=current_user.username, user_id=current_user.id)
 
 @app.route('/logout')  # 登出
 @login_required
@@ -128,4 +129,4 @@ if __name__ == '__main__':
     dname = os.path.dirname(abspath)
     os.chdir(dname)
     print(dname)
-    app.run(host='0.0.0.0', port=7777, debug=True)
+    app.run(host='0.0.0.0', port='7777', debug=True)

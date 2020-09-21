@@ -5,10 +5,9 @@ import sqlite3
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 
-app = Flask(__name__, static_url_path='', static_folder='', template_folder='')
+app = Flask(__name__)
 CORS(app)
 
-user_id = 0
 
 # 数据库连接
 myDatabase = sqlite3.connect('LogDB.db')
@@ -36,8 +35,7 @@ def get_pdf_list():
         # file_path = os.path.join(os.getcwd(), dir, file)
         temp_dic = {'file_name': file}
         response_list.append(temp_dic)
-    user_id = user_id + 1
-    return jsonify({"pdf_file": response_list, "user_id": user_id})
+    return jsonify({"pdf_file": response_list})
 
 @app.route('/api/get_pdf_content', methods=['GET'])
 def get_pdf_content():
@@ -63,4 +61,4 @@ if __name__ == "__main__":
     abspath = os.path.abspath(__file__)
     dname = os.path.dirname(abspath)
     os.chdir(dname)
-    app.run(host='0.0.0.0')
+    app.run(host='127.0.0.1')
