@@ -28,7 +28,7 @@ def get_pdf_list():
     response_list = []
     for file in os.listdir(dir):
         # file_path = os.path.join(os.getcwd(), dir, file)
-        temp_dic = {'file_name': file}
+        temp_dic = {'name': file}
         response_list.append(temp_dic)
     return jsonify({"pdf_file": response_list})
 
