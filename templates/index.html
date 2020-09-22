@@ -20,79 +20,43 @@
         <div id="app">
             <v-app id="inspire">
                 <v-navigation-drawer v-model="drawer" app clipped color="grey lighten-4" :width="325">
-                    <!-- <v-text-field v-model="search" label="Search Contents" light flat solo-inverted hide-details
-                        clearable clear-icon="mdi-close-circle-outline"></v-text-field> -->
-                    <!-- <v-checkbox v-model="caseSensitive" light hide-details label="Case sensitive search"></v-checkbox> -->
-                    <!--<v-treeview @update:active="load_data" :items="items" :dense="dense" :search="search"
+                    <v-text-field v-model="search" label="Search Contents" light flat solo-inverted
+                        hide-details clearable clear-icon="mdi-close-circle-outline"></v-text-field>
+                    <v-checkbox v-model="caseSensitive" light hide-details label="Case sensitive search"></v-checkbox>
+
+
+
+                    <v-treeview @update:active="loadPdfData" :items="files" :dense="dense" :search="search"
                         :filter="filter" :selectable="selectable" :activatable="activatable" :hoverable="hoverable"
                         :open-on-click="openOnClick" :selected-color="selectedColor" :color="color" :shaped="shaped"
-                        :rounded="rounded"></v-treeview>-->
-
-                        <div>
-                            <v-app-bar
-                              color="deep-purple accent-4"
-                              dense
-                              dark
-                            >
-                              <v-app-bar-nav-icon></v-app-bar-nav-icon>
-                        
-                              <v-toolbar-title id="user_name" data-uid="{{ user_id }}">Hello, {{user_name}}!</v-toolbar-title>
-
-                        
-                              <v-spacer></v-spacer>
-                        
-                              <v-menu
-                                left
-                                bottom
-                              >
-                                <template v-slot:activator="{ on, attrs }">
-                                  <v-btn
-                                    icon
-                                    v-bind="attrs"
-                                    v-on="on"
-                                  >
-                                    <v-icon>mdi-dots-vertical</v-icon>
-                                  </v-btn>
-                                </template>
-                        
-                                <v-list>
-                                  <v-list-item>
-                                    <a href='{{ url_for('logout')}}'>Log out</a>
-                                  </v-list-item>
-                                </v-list>
-                              </v-menu>
-                            </v-app-bar>
-                          </div>
+                        :rounded="rounded"></v-treeview>
 
 
-                    <v-card max-width="500" class="mx-auto">
+                    <!-- <v-card max-width="500" class="mx-auto">
 
-                        <v-list nav dense>
-                            <v-list-item-group  color="primary">
-                            <v-list-item v-for="file in files" :key="file.name" @click="loadPdfData(file.name)">
+                        <v-list nav dense :search="search">
+                            <v-list-item-group v-model="item" color="primary">
+                            <v-list-item v-for="file in files" :key="file.file_name" @click="loadPdfData(file.file_name)">
+                            <v-list-item-avatar v-if="avatar">
+                                <v-img :src="item.avatar"></v-img>
+                            </v-list-item-avatar>
 
                                 <v-list-item-content>
-                                    <v-list-item-title v-text="file.name">
+                                    <v-list-item-title v-text="file.file_name">
                                     </v-list-item-title>
                                 </v-list-item-content>
 
                             </v-list-item>
                             </v-list-item-group>
 
-                        </v-list>
+                        </v-list> 
 
-                        <!-- <v-treeview :active.sync="active" :items="items" :open.sync="open" item-key='name'
-                            activatable color="warning" open-on-click transition :search="search">
-                        </v-treeview> -->
-
-
-                    </v-card>
+                    </v-card>-->
                 </v-navigation-drawer>
 
                 <v-content>
-                    
-                    <iframe id="pdfViewer" src='{{ url_for('static', filename='pdfjs-viewer/web/viewer.html' ) }}'
-                        style="width: 100%; height: 100%;" allowfullscreen="" webkitallowfullscreen="">
+                    <iframe id="pdfViewer" src="{{ url_for('static', filename='pdfjs-viewer/web/viewer.html') }}" style="width: 100%; height: 100%;"
+                        allowfullscreen="" webkitallowfullscreen="">
                     </iframe>
                 </v-content>
             </v-app>
@@ -104,8 +68,6 @@
             el: '#app',
             vuetify: new Vuetify(),
             data: {
-
-
                 pdf_content: Blob,
                 dense: true,
                 selectable: false,
@@ -125,15 +87,12 @@
                     'success',
                     'warning lighten-2',
                 ],
-
-                active: [],
-                open: [],
+                items: [],
                 org_array: [],
                 files: '',
                 selection: [],
                 drawer: null,
             },
-
             created: function () {
                 this.inIt();
             },
@@ -146,57 +105,28 @@
                     return this.caseSensitive
                         ? (item, search, textKey) => item[textKey].indexOf(search) > -1
                         : undefined
-                },
-
-                // items() {
-                    
-                //     return [
-                //         {
-                //             name: 'Contents',
-                //             children: this.files,
-                //         },
-                //     ]
-                // },
-                // selected() {
-                    
-                //     const name = this.active[0]
-                //     return this.files.find(file => file.name === name)
-                // },
+                }
             },
 
-
-
-            // watch: {
-
-            //     selected: 'loadPdfDate(active[0])',
-
-            // },
-
-
-
             methods: {
-
                 load_data: function () { inIt() },
                 inIt: function () {
                     let self = this;
                     axios.get('http://127.0.0.1:5000/api/get_pdf_list').then(function (response) {
                         console.log(response.data);
                         self.files = response.data.pdf_file;
-                        console.log(self.files)
                     });
                 },
 
 
-                loadPdfData: function (name) {
+                loadPdfData: function (id) {
+                    let temp_name = this.files[id[0]].name;
                     let pdfjsframe = document.getElementById('pdfViewer');
                     let self = this;
-                    let uid = document.getElementById('user_name').getAttribute('data-uid');
-                    console.log(uid)
-                    axios.get('http://127.0.0.1:5000/api/get_pdf_content', { params: { file_name: name, user_id: uid } }).then(function (response) {
-
+                    axios.get('http://127.0.0.1:5000/api/get_pdf_content', {params:{file_name: temp_name}}).then(function (response) {
+                        
                         pdfData = self.base64ToUint8Array(response.data);
                         pdfjsframe.contentWindow.PDFViewerApplication.open(pdfData)
-
                     });
                 },
 

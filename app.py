@@ -26,9 +26,11 @@ def get_pdf_list():
     global user_id
     dir = 'pdfs'
     response_list = []
+    id = 0
     for file in os.listdir(dir):
         # file_path = os.path.join(os.getcwd(), dir, file)
-        temp_dic = {'name': file}
+        temp_dic = {'id': id, 'name': file}
+        id += 1
         response_list.append(temp_dic)
     return jsonify({"pdf_file": response_list})
 
@@ -56,4 +58,4 @@ if __name__ == "__main__":
     abspath = os.path.abspath(__file__)
     dname = os.path.dirname(abspath)
     os.chdir(dname)
-    app.run(host='127.0.0.1')
+    app.run(host='0.0.0.0')
